@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void merge_files(const char* input_file1, const char* input_file2, const char* output_file) {
+    FILE* file1, * file2, * file3;
+    char buffer[1024];
+
+     
+    file2 = fopen(input_file2, "r");
+    if (file2 == NULL) {
+        perror("두 번째 파일을 열 수 없습니다.");
+        fclose(file1);
+        exit(1);
+    }
+
+    
+    file3 = fopen(output_file, "w");
+    if (file3 == NULL) {
+        perror("병합 파일을 열 수 없습니다.");
+        fclose(file1);
+        fclose(file2);
+        exit(1);
+    }
+
+    
+    while (fgets(buffer, sizeof(buffer), file1) != NULL) {
+        fputs(buffer, file3);
+    }
+
+    
+    while (fgets(buffer, sizeof(buffer), file2) != NULL) {
+        fputs(buffer, file3);
+    }
+
+    printf("파일 병합이 완료되었습니다: %s\n", output_file);
+
+
+int main(int argc, char* argv[]) {
+    if (argc != 4) {
+        fprintf(stderr, "사용법: %s 입력파일1 입력파일2 병합파일\n", argv[0]);
+        return 1;
+    }
+
+    merge_files(argv[1], argv[2], argv[3]);
+
+    return 0;
+}
